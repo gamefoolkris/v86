@@ -1,0 +1,18 @@
+* {
+  font-family: 'Arial';
+}
+.setupOption > label {
+    font-size: 12px;
+}
+.setupOption {
+    margin-top: 12px;
+}
+.setupCategory {
+    margin-top: 24px;
+}
+#vgabios {
+  margin-left: 0.5px;
+}
+#biosText, #vgabiosText {
+  display: none;
+}

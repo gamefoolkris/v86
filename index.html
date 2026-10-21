@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>V86</title>
+    <link rel="stylesheet" href="./style/main.css" />
+    <script src="js/libv86.js"></script>
+  </head>
+  <body>
+    <div id="topRow">
+      <button id="startButton">
+        Start
+      </button>
+      <button id="stopButton">
+        Stop
+      </button>
+      <button id="pauseButton">
+        Pause
+      </button>
+      <button id="resetButton">
+        Reset
+      </button>
+      <button id="fullscreenButton">
+        Fullscreen
+      </button>
+    </div>
+    <div id="screen_container">
+      <div style="white-space: pre; font: 14px monospace; line-height: 14px; background-color: #000; color: #aaa; display: inline-block; padding: 4px;"></div>
+      <canvas style="display: none;"></canvas>
+    </div>
+    <div class="setupOption">
+      <b>CD Image</b>
+      <br/>
+      <input type="file" id="cdi1" />
+    </div>
+    <div class="setupOption">
+      <b>Floppy Disk Image</b>
+      <br/>
+      <input type="file" id="fdi1" />
+      <br/>
+      <input type="file" id="fdi2" />
+    </div>
+    <div class="setupOption">
+      <b>Hard Disk Images</b>
+      <br/>
+      <input type="file" id="hdi1" />
+      <br/>
+      <input type="file" id="hdi2" />
+    </div>
+    <div class="setupOption">
+      <b>Kernel Image</b>
+      <br/>
+      <input type="file" id="ki1" />
+    </div>
+    <div class="setupOption">
+      <b>Initial RAMdisk</b>
+      <br/>
+      <input type="file" id="ird1" />
+    </div>
+    <div class="setupOption">
+      <b>Initial State</b>
+      <br/>
+      <input type="file" id="isi1" />
+    </div>
+    <div class="setupOption">
+      <b>BIOS</b>
+      <br/>
+      <label for="bios">Main</label>
+      <select id="bios" value="seabios.bin">
+        <option value="seabios.bin" selected>seabios.bin (128.00 KB)</option>
+        <option value="bochs-bios.bin">bochs-bios.bin (64.00 KB)</option>
+        <option value="imp">Import</option>
+        <option value="imp" id="biosText"></option>
+      </select>
+      <br/>
+      <label for="vgabios">VGA</label>
+      <select id="vgabios" value="bochs-vgabios.bin">
+        <option value="main/vgabios.bin" selected>vgabios.bin (35.50 KB)</option>
+        <option value="main/bochs-vgabios.bin">bochs-vgabios.bin (42.00 KB)</option>
+        <option value="imp">Import</option>
+        <option value="imp" id="vgabiosText"></option>
+      </select>
+    </div>
+    <div class="setupOption setupCategory">
+      <b>Memory</b>
+      <br/>
+      <label><input type="number" id="ram" value="128"/> MB</label>
+    </div>
+    <div class="setupOption">
+      <b>Video Memory</b>
+      <br/>
+      <label><input type="number" id="vram" value="8"/> MB</label>
+    </div>
+    <div class="setupOption setupCategory">
+      <b>Networking Proxy</b>
+      <br/>
+      <select id="proxPre" value="fetch">
+        <option value="fetch">Fetch</option>
+        <option value="">None</option>
+        <option value="inbrowser">InBrowser</option>
+        <option value="wss://relay.widgetry.org/">Public Relay</option>
+        <option value="wisps://wisp.mercurywork.shop/v86/">Wisp</option>
+      </select>
+      <input id="prox" value="fetch"/>
+    </div>
+    <div class="setupOption">
+      <b>Network Device Type</b>
+      <br/>
+      <select id="nettype" value="ne2k">
+        <option value="ne2k">NE2000</option>
+        <option value="virtio">virtio</option>
+        <option value="none">None</option>
+      </select>
+    </div>
+    <div class="setupOption" style="display: none">
+      <b>Modem</b>
+      <br/>
+      <select id="modem" value="none">
+        <option value="none">None</option>
+        <option value="uart1">UART1</option>
+        <option value="uart2">UART2</option>
+        <option value="uart3">UART3</option>
+      </select>
+    </div>
+    <div class="setupOption setupCategory">
+      <b>Boot Order</b>
+      <br/>
+      <select id="bord" value="auto">
+        <option value="213">Auto</option>
+        <option value="312">CD / Floppy / Hard Disk</option>
+        <option value="321">CD / Hard Disk / Floppy</option>
+        <option value="132">Floppy / CD / Hard Disk</option>
+        <option value="123">Floppy / Hard Disk / CD</option>
+        <option value="213">Hard Disk / Floppy / CD</option>
+        <option value="231">Hard Disk / CD / Floppy</option>
+      </select>
+    </div>
+    <div class="setupOption setupCategory">
+      <b>Other</b>
+      <br/>
+      <label><input id="audio" type=checkbox checked> Enable Audio</label><br/>
+      <label><input id="acpi" type=checkbox> Enable ACPI</label>
+    </div>
+    <script src="js/main.js"></script>
+  </body>
+</html>
