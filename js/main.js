@@ -1,7 +1,12 @@
 var getElem = (id) => document.getElementById(id);
 
 var elems = {
-  "startButton": getElem("startButton"),
+  "openButton": getElem("openButton"),
+  "closeButton": getElem("closeButton"),
+  "pauseButton": getElem("pauseButton"),
+  "resetButton": getElem("resetButton"),
+  "fullscreenButton": getElem("fullscreenButton"),
+  "VMScreen": getElem("VMScreen"),
   "cdi1": getElem("cdi1"),
   "fdi1": getElem("fdi1"),
   "fdi2": getElem("fdi2"),
@@ -26,17 +31,43 @@ var elems = {
   "acpi": getElem("acpi"),
 }
 
-async function start() {
-  if(window.emulator) {
-    window.emulator.destroy();
-  }
+async function selectFiles({ accept = "*", multiple = true } = {}) {
+  return new Promise((resolve) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = accept;
+    input.multiple = multiple;
+
+    input.addEventListener("change", () => {
+      resolve(Array.from(input.files ?? []));
+      input.remove();
+    }, { once: true });
+
+    input.addEventListener("cancel", () => {
+      resolve([]);
+      input.remove();
+    }, { once: true });
+
+    input.click();
+  });
+}
+
+async function open() {
   let config = {
     wasm_path: "misc/v86.wasm",
     memory_size: elems.ram.value * 1024 * 1024,
     vga_memory_size: elems.vram.value * 1024 * 1024,
-    screen_container: document.getElementById("screen_container"),
-    bios: {},
-    vga_bios: {},
+    screen_container: elems.VMScreen,
+    bios: elems.bios.files[0] ? {
+      buffer: await elems.bios.files[0].arrayBuffer()
+    } : {
+      url: elems.bios.value
+    },
+    vga_bios: elems.vgabios.files[0] ? {
+      buffer: await elems.vgabios.files[0].arrayBuffer()
+    } : {
+      url: elems.vgabios.value
+    },
     net_device: {
       type: elems.nettype.value,
       relay_url: elems.prox.value
@@ -74,21 +105,88 @@ async function start() {
     buffer: await elems.isi1.files[0].arrayBuffer()
   }
   window.emulator = new V86(config);
+  elems.pauseButton.innerText = "Pause";
+
+  emulator.add_listener("emulator-stopped", function() {
+    if(this.destroyed) {
+      elems.pauseButton.innerText = "Pause";
+      elems.VMScreen.innerHTML = `<div></div><canvas></canvas>`;
+    } else {
+      elems.pauseButton.innerText = "Resume";
+    }
+  });
+
+  emulator.add_listener("emulator-started", function() {
+    elems.pauseButton.innerText = "Pause";
+  });
+}
+async function pause() {
+  if(!emulator) {
+    return;
+  }
+  if(emulator.v86.running) {
+    emulator.stop();
+    return false;
+  } else {
+    emulator.run();
+    return true;
+  }
+}
+async function reset() {
+  if(!emulator) {
+    return;
+  }
+  emulator.restart();
+}
+async function fullscreen() {
+  if(!emulator) {
+    return;
+  }
+  emulator.screen_go_fullscreen();
+}
+async function close() {
+  if(!emulator) {
+    return;
+  }
+  emulator.destroy();
 }
 
 async function init() {
-  elems.startButton.addEventListener("click", start);
-  elems.bios.addEventListener("change", function() {
+  elems.openButton.addEventListener("click", open);
+  elems.pauseButton.addEventListener("click", pause);
+  elems.resetButton.addEventListener("click", reset);
+  elems.closeButton.addEventListener("click", close);
+  elems.fullscreenButton.addEventListener("click", fullscreen);
+  elems.bios.addEventListener("change", async function() {
     if(this.value === "imp") {
       let file = (await selectFiles({ multiple: false }))[0];
       if(file) {
-
+        this.files = [file];
         elems.biosText.innerText = `${file.name} (${(file.size / 1024).toFixed(2)}KB)`;
         this.selectedIndex = 3;
       } else {
         this.value = this.previousValue;
         this.selectedIndex = this.previousIndex;
       }
+    } else {
+      this.files = [];
+    }
+    this.previousValue = this.value;
+    this.previousIndex = this.selectedIndex;
+  })
+  elems.vgabios.addEventListener("change", async function() {
+    if(this.value === "imp") {
+      let file = (await selectFiles({ multiple: false }))[0];
+      if(file) {
+        this.files = [file];
+        elems.biosText.innerText = `${file.name} (${(file.size / 1024).toFixed(2)}KB)`;
+        this.selectedIndex = 3;
+      } else {
+        this.value = this.previousValue;
+        this.selectedIndex = this.previousIndex;
+      }
+    } else {
+      this.files = [];
     }
     this.previousValue = this.value;
     this.previousIndex = this.selectedIndex;
@@ -99,5 +197,6 @@ elems.bios.previousValue = elems.bios.value;
 elems.vgabios.previousValue = elems.vgabios.value;
 elems.bios.previousIndex = elems.bios.selectedIndex;
 elems.vgabios.previousIndex = elems.vgabios.selectedIndex;
+elems.bios.files = elems.vgabios.files = [];
 
 init();

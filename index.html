@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>V86</title>
-    <link rel="stylesheet" href="./style/main.css" />
+    <link rel="stylesheet" href="style/main.css" />
     <script src="js/libv86.js"></script>
   </head>
   <body>
     <div id="topRow">
-      <button id="startButton">
-        Start
+      <button id="openButton">
+        Open
       </button>
-      <button id="stopButton">
-        Stop
+      <button id="closeButton">
+        Close
       </button>
       <button id="pauseButton">
         Pause
@@ -23,9 +24,8 @@
         Fullscreen
       </button>
     </div>
-    <div id="screen_container">
-      <div style="white-space: pre; font: 14px monospace; line-height: 14px; background-color: #000; color: #aaa; display: inline-block; padding: 4px;"></div>
-      <canvas style="display: none;"></canvas>
+    <div id="VMScreen">
+      <div></div><canvas></canvas>
     </div>
     <div class="setupOption">
       <b>CD Image</b>
@@ -65,17 +65,17 @@
       <b>BIOS</b>
       <br/>
       <label for="bios">Main</label>
-      <select id="bios" value="seabios.bin">
-        <option value="seabios.bin" selected>seabios.bin (128.00 KB)</option>
-        <option value="bochs-bios.bin">bochs-bios.bin (64.00 KB)</option>
+      <select id="bios" value="misc/seabios.bin">
+        <option value="misc/seabios.bin" selected>seabios.bin (128.00 KB)</option>
+        <option value="misc/bochs-bios.bin">bochs-bios.bin (64.00 KB)</option>
         <option value="imp">Import</option>
         <option value="imp" id="biosText"></option>
       </select>
       <br/>
       <label for="vgabios">VGA</label>
-      <select id="vgabios" value="bochs-vgabios.bin">
-        <option value="main/vgabios.bin" selected>vgabios.bin (35.50 KB)</option>
-        <option value="main/bochs-vgabios.bin">bochs-vgabios.bin (42.00 KB)</option>
+      <select id="vgabios" value="misc/vgabios.bin">
+        <option value="misc/vgabios.bin" selected>vgabios.bin (35.50 KB)</option>
+        <option value="misc/bochs-vgabios.bin">bochs-vgabios.bin (42.00 KB)</option>
         <option value="imp">Import</option>
         <option value="imp" id="vgabiosText"></option>
       </select>

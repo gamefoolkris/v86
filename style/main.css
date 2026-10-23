@@ -16,3 +16,15 @@
 #biosText, #vgabiosText {
   display: none;
 }
+#VMScreen > div {
+  white-space: pre;
+  font: 14px monospace;
+  line-height: 14px;
+  background-color: #000;
+  color: #aaa;
+  display: none;
+  padding: 4px;
+}
+#VMScreen > canvas {
+  display: none;
+}
