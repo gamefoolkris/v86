@@ -58,13 +58,13 @@ async function open() {
     memory_size: elems.ram.value * 1024 * 1024,
     vga_memory_size: elems.vram.value * 1024 * 1024,
     screen_container: elems.VMScreen,
-    bios: elems.bios.files[0] ? {
-      buffer: await elems.bios.files[0].arrayBuffer()
+    bios: biosFile ? {
+      buffer: await biosFile.arrayBuffer()
     } : {
       url: elems.bios.value
     },
-    vga_bios: elems.vgabios.files[0] ? {
-      buffer: await elems.vgabios.files[0].arrayBuffer()
+    vga_bios: vgabiosFile ? {
+      buffer: await vgabiosFile.arrayBuffer()
     } : {
       url: elems.vgabios.value
     },
@@ -158,7 +158,7 @@ async function init() {
     if(this.value === "imp") {
       let file = (await selectFiles({ multiple: false }))[0];
       if(file) {
-        this.files = [file];
+        biosFile = file;
         elems.biosText.innerText = `${file.name} (${(file.size / 1024).toFixed(2)}KB)`;
         this.selectedIndex = 3;
       } else {
@@ -166,7 +166,7 @@ async function init() {
         this.selectedIndex = this.previousIndex;
       }
     } else {
-      this.files = [];
+      biosFile = null;
     }
     this.previousValue = this.value;
     this.previousIndex = this.selectedIndex;
@@ -175,7 +175,7 @@ async function init() {
     if(this.value === "imp") {
       let file = (await selectFiles({ multiple: false }))[0];
       if(file) {
-        this.files = [file];
+        vgabiosFile = file;
         elems.vgabiosText.innerText = `${file.name} (${(file.size / 1024).toFixed(2)}KB)`;
         this.selectedIndex = 3;
       } else {
@@ -183,7 +183,7 @@ async function init() {
         this.selectedIndex = this.previousIndex;
       }
     } else {
-      this.files = [];
+      vgabiosFile = null;
     }
     this.previousValue = this.value;
     this.previousIndex = this.selectedIndex;
@@ -194,7 +194,7 @@ elems.bios.previousValue = elems.bios.value;
 elems.vgabios.previousValue = elems.vgabios.value;
 elems.bios.previousIndex = elems.bios.selectedIndex;
 elems.vgabios.previousIndex = elems.vgabios.selectedIndex;
-elems.bios.files = [];
-elems.vgabios.files = [];
+var biosFile = null;
+var vgabiosFile = null;
 
 init();
