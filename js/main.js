@@ -80,9 +80,6 @@ async function open() {
   if(elems.cdi1.files[0]) config.cdrom = {
     buffer: await elems.cdi1.files[0].arrayBuffer()
   }
-  if(elems.cdi1.files[0]) config.cdrom = {
-    buffer: await elems.cdi1.files[0].arrayBuffer()
-  }
   if(elems.fdi1.files[0]) config.fda = {
     buffer: await elems.fdi1.files[0].arrayBuffer()
   }
@@ -197,6 +194,7 @@ elems.bios.previousValue = elems.bios.value;
 elems.vgabios.previousValue = elems.vgabios.value;
 elems.bios.previousIndex = elems.bios.selectedIndex;
 elems.vgabios.previousIndex = elems.vgabios.selectedIndex;
-elems.bios.files = elems.vgabios.files = [];
+elems.bios.files = [];
+elems.vgabios.files = [];
 
 init();
