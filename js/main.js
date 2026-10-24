@@ -78,7 +78,7 @@ async function open() {
     autostart: true
   }
   if(elems.cdi1.files[0]) config.cdrom = {
-    buffer: await elems.cdi1.files[0].arrayBuffer()
+    file: elems.cdi1.files[0]
   }
   if(elems.fdi1.files[0]) config.fda = {
     buffer: await elems.fdi1.files[0].arrayBuffer()
