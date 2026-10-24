@@ -179,7 +179,7 @@ async function init() {
       let file = (await selectFiles({ multiple: false }))[0];
       if(file) {
         this.files = [file];
-        elems.biosText.innerText = `${file.name} (${(file.size / 1024).toFixed(2)}KB)`;
+        elems.vgabiosText.innerText = `${file.name} (${(file.size / 1024).toFixed(2)}KB)`;
         this.selectedIndex = 3;
       } else {
         this.value = this.previousValue;
